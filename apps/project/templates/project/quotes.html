@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title></title>
+
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+    <div class="navbar">
+      <h1 style="display: inline-block">Welcome, {{user.first_name}}</h1>
+      <a href="/logout" style="float: right">Logout</a>
+    </div>
+
+    <div class="container">
+
+      <div class="col-lg-4 pull-left rounded" style="border: 1px solid black; margin-top: 100px; padding: 10px; height: 800px; overflow: scroll;">
+        <h1>Quotable Quotes:</h1>
+        {%for i in quotes%}
+          {%if not i in favorites%}
+        <div style="border: 1px solid black; padding: 5px; margin: 10px;">
+          <h1 style="font-size: 20px; font-weight: bold;">{{i.author}}</h1>
+          <p class="lead" style="font-size: 15px; ">{{i.content}}</p>
+          <p style="margin-top:10px; display: inline-block;">Posted by <a href="/users/{{i.user.id}}">{{i.user.first_name}}</a></p>
+          <a href="/favorite/{{i.id}}"><button type="button" class="btn btn-primary pull-right">Favorite</button></a>
+        </div>
+          {%endif%}
+        {%endfor%}
+
+      </div>
+      <div class="col-lg-4" style="margin-top: 100px;">
+        {% if messages %}
+          {% for i in messages %}
+          <div class="alert alert-danger alert-dismissable" role="alert">
+            <button action="/submitquote" type="button" class="close" data-dismiss="alert"><span aria-hidden="true">x</span><span class="sr-only">Close</span></button>
+            {{i}}<br>
+          </div>
+          {%endfor%}
+        {%endif%}
+        <form method="post" action="/submitquote">
+          {% csrf_token %}
+          <h3>Submit a quote!</h3>
+          <div class="form-group">
+            <label for="quote">Who Said it?</label>
+            <input type="text" class="form-control" name="author" placeholder="Quote by">
+          </div>
+          <div class="form-group">
+            <label for="quote">Type your quote here!</label>
+            <textarea name="quote" class="form-control" placeholder="Quote..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit!</button>
+        </form>
+      </div>
+      <div class="col-lg-4 pull-right rounded" style="border: 1px solid black; margin-top: 100px; padding: 10px; height: 400px; overflow: scroll;">
+        <h1>Your Favorites: </h1>
+        {%for i in favorites%}
+        <div style="border: 1px solid black; padding: 5px; margin: 10px;">
+          <h1 style="font-size: 20px; font-weight: bold;">{{i.author}}</h1>
+          <p class="lead" style="font-size: 15px; ">{{i.content}}</p>
+          <p style="margin-top:10px; display: inline-block;">Posted by <a href="/users/{{i.user.id}}">{{i.user.first_name}}</a></p>
+          <a href="/unfavorite/{{i.id}}"><button type="button" class="btn btn-primary pull-right">Un-Favorite</button></a>
+        </div>
+        {%endfor%}
+
+      </div>
+    </div>
+
+    <!-- /.container -->
+
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+  </body>
+</html>
